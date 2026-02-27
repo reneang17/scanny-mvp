@@ -2,7 +2,7 @@
 
 DocuExtract is a Minimum Viable Product (MVP) web application that allows users to upload document images (like payment receipts or invoices) and dynamically extract structured JSON data from them using **Qwen2.5-VL**, entirely processed **locally** on-device.
 
-![Demo](demo.webp)
+![Demo](demo.gif)
 
 ## Features
 - **Dynamic Schema Builder**: Add specific fields (e.g., "Vendor", "Total") and instructions (e.g., "text", "number without currency") that you want to extract from your document.
