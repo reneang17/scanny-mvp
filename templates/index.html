@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title id="title">Document Extractor form MVP</title>
+    
+    <!-- Google Fonts: Outift and Inter -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Outfit:wght@400;500;700&display=swap" rel="stylesheet">
+    
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
+    
+    <!-- Phosphor Icons for elegant UI icons -->
+    <script src="https://unpkg.com/@phosphor-icons/web"></script>
+</head>
+<body>
+    <div class="app-container">
+        <!-- Language Toggle -->
+        <header class="app-header">
+            <div class="logo">
+                <i class="ph ph-scan"></i>
+                <span id="header_title">DocuExtract</span>
+            </div>
+            <div class="lang-toggle">
+                <button id="btn_es" class="lang-btn active">ES</button>
+                <button id="btn_en" class="lang-btn">EN</button>
+            </div>
+        </header>
+
+        <main class="main-content">
+            <div class="form-wrapper glass-panel">
+                <div class="hero">
+                    <h1 id="main_heading">Extraer Información</h1>
+                    <p id="main_subheading">Sube tu documento y define exactamente qué necesitas extraer de él.</p>
+                </div>
+
+                <form id="extractor_form">
+                    
+                    <!-- Section 1: Image Upload -->
+                    <section class="form-section">
+                        <div class="section-header">
+                            <i class="ph-fill ph-image"></i>
+                            <h2 id="section_1_title">1. Documento</h2>
+                        </div>
+                        <div class="upload-area" id="drop_zone">
+                            <input type="file" id="image_input" name="image" accept="image/*" hidden>
+                            <label for="image_input" class="upload-label">
+                                <i class="ph ph-upload-simple upload-icon"></i>
+                                <span id="upload_text">Haz clic o arrastra una imagen aquí</span>
+                                <span class="upload-hint" id="upload_hint">JPG, PNG hasta 16MB</span>
+                            </label>
+                            <div id="image_preview_container" class="hidden">
+                                <img id="image_preview" src="" alt="Vista previa">
+                                <button type="button" id="remove_image_btn" class="icon-btn danger">
+                                    <i class="ph ph-trash"></i>
+                                </button>
+                            </div>
+                        </div>
+
+                        <div class="input-group mt-xl">
+                            <label for="doc_type" id="doc_type_label">Título o Tipo de Documento</label>
+                            <input type="text" id="doc_type" name="doc_type" placeholder="Ej. Recibo de pago, Tabla de excel" required>
+                        </div>
+                    </section>
+
+                    <!-- Section 2: Fields to Extract -->
+                    <section class="form-section">
+                        <div class="section-header">
+                            <i class="ph-fill ph-list-magnifying-glass"></i>
+                            <h2 id="section_2_title">2. Campos a Extraer</h2>
+                        </div>
+                        <p class="section-desc" id="section_2_desc">Agrega toda la información que te interese extraer de la imagen.</p>
+                        
+                        <div id="fields_container" class="fields-list">
+                            <!-- Fields will be dynamically added here -->
+                        </div>
+
+                        <button type="button" id="add_field_btn" class="btn secondary mt-md">
+                            <i class="ph ph-plus-circle"></i>
+                            <span id="btn_add_field_text">Agregar Campo</span>
+                        </button>
+                    </section>
+
+                    <!-- Submit -->
+                    <div class="actions" style="display: flex; gap: 1rem;">
+                        <input type="hidden" id="form_action" name="action" value="generate">
+                        <button type="submit" id="submit_btn" class="btn secondary full-width" onclick="document.getElementById('form_action').value='generate'">
+                            <i class="ph ph-file-code"></i>
+                            <span id="btn_submit_text">Generar Instrucciones JSON</span>
+                        </button>
+                        <button type="submit" id="extract_btn" class="btn primary full-width pulse" onclick="document.getElementById('form_action').value='extract'">
+                            <i class="ph ph-magic-wand"></i>
+                            <span id="btn_extract_text">Extraer con Qwen2.5-VL</span>
+                        </button>
+                    </div>
+
+                </form>
+
+            </div>
+
+            <!-- Success State (Hidden by default) -->
+            <div id="success_state" class="success-panel glass-panel hidden">
+                <div class="success-icon-wrapper">
+                    <i class="ph-fill ph-check-circle success-icon"></i>
+                </div>
+                <h2 id="success_title">¡Generado con éxito!</h2>
+                <p id="success_desc">La imagen ha sido procesada y las instrucciones JSON creadas.</p>
+                <p id="processing_time_msg" class="hidden" style="font-size: 0.9em; opacity: 0.8; margin-top: 5px;"></p>
+                <div class="json-preview-box">
+                    <div class="code-header">
+                        <span id="code_title">Resultado JSON</span>
+                        <button id="copy_btn" class="icon-btn small"><i class="ph ph-copy"></i></button>
+                    </div>
+                    <pre><code id="json_output"></code></pre>
+                </div>
+                <button id="reset_btn" class="btn secondary mt-lg full-width">
+                    <i class="ph ph-arrow-counter-clockwise"></i>
+                    <span id="btn_reset_text">Procesar otro documento</span>
+                </button>
+            </div>
+        </main>
+    </div>
+
+    <!-- Data Dictionary for Translation -->
+    <script src="{{ url_for('static', filename='js/app.js') }}"></script>
+</body>
+</html>
